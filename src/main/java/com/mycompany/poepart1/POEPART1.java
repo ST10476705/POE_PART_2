@@ -16,52 +16,72 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author RC_Student_lab
- */
-
-
 public class POEPART1 {
-    private static final List<Message> messages = new ArrayList<>();
     private static final List<Message> sentMessages = new ArrayList<>();
     private static final List<Message> storedMessages = new ArrayList<>();
     private static final List<String> messageHashes = new ArrayList<>();
     private static final List<String> messageIDs = new ArrayList<>();
     private static int totalMessagesAllowed = 0;
     private static int messagesSent = 0;
+    private static String registeredUsername = "";
+    private static String registeredPassword = "";
 
-
-    public static void main(String[] args)  throws IOException {
-      // Creating instances
+    public static void main(String[] args) throws IOException {
+        // Creating instances
         Login objLogin = new Login();
         Message objMessage = new Message();
 
         // Registration Section
-        String username = JOptionPane.showInputDialog("Please enter username");
-        if (objLogin.CheckUserName(username)) {
-            JOptionPane.showMessageDialog(null, "Thank you for username");
-        } else {
-            JOptionPane.showMessageDialog(null, "The username is incorrectly formatted");
+        // Username
+        boolean isValidUsername = false;
+        while (!isValidUsername) {
+            String username = JOptionPane.showInputDialog("Please enter username");
+            if (username == null) System.exit(0);
+            
+            if (objLogin.CheckUserName(username)) {
+                registeredUsername = username;
+                JOptionPane.showMessageDialog(null, "Thank you for username");
+                isValidUsername = true;
+            } else {
+                JOptionPane.showMessageDialog(null, "The username is incorrectly formatted");
+            }
+        }
+        
+        // Password
+        boolean isValidPassword = false;
+        while (!isValidPassword) {
+            String password = JOptionPane.showInputDialog("Please enter the password");
+            if (password == null) System.exit(0);
+            
+            if (objLogin.checkpasswordComplexity(password)) {
+                registeredPassword = password;
+                JOptionPane.showMessageDialog(null, "Thank you for password");
+                isValidPassword = true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Password is incorrectly formatted");
+            }
         }
 
-        String password = JOptionPane.showInputDialog("Please enter the password");
-        if (objLogin.checkpasswordComplexity(password)) {
-            JOptionPane.showMessageDialog(null, "Thank you for password");
-        } else {
-            JOptionPane.showMessageDialog(null, "Password is incorrectly formatted");
-        }
-
-        String CellPhoneNumber = JOptionPane.showInputDialog("Please enter a cellphone number");
-        if (objLogin.checkCellPhoneNumber(CellPhoneNumber)) {
-            JOptionPane.showMessageDialog(null, "Thank you for the cellphone number");
-        } else {
-            JOptionPane.showMessageDialog(null, "The cellphone number is incorrectly formatted");
+        // Phone Number
+        boolean isValidPhoneNumber = false;
+        while (!isValidPhoneNumber) {
+            String cellPhoneNumber = JOptionPane.showInputDialog("Please enter a cellphone number");
+            if (cellPhoneNumber == null) System.exit(0);
+            
+            if (objLogin.checkCellPhoneNumber(cellPhoneNumber.trim())) {
+                JOptionPane.showMessageDialog(null, "Thank you for the cellphone number");
+                isValidPhoneNumber = true;
+            } else {
+                JOptionPane.showMessageDialog(null, "The cellphone number is incorrectly formatted");
+            }
         }
 
         // Additional information
         String firstName = JOptionPane.showInputDialog("Enter your first name:");
+        if (firstName == null) System.exit(0);
+        
         String lastName = JOptionPane.showInputDialog("Enter your last name:");
+        if (lastName == null) System.exit(0);
 
         // Login Section
         boolean loggedIn = false;
@@ -70,14 +90,15 @@ public class POEPART1 {
 
         while (!loggedIn && attempts < MAX_ATTEMPTS) {
             JOptionPane.showMessageDialog(null, "=============LOGIN=============");
-            objLogin.registerUser(username, password);
-            String verifyusername = JOptionPane.showInputDialog("Please enter the username you signed up with");
+            String verifyUsername = JOptionPane.showInputDialog("Please enter the username you signed up with");
+            if (verifyUsername == null) System.exit(0);
+            
             String verifyPassword = JOptionPane.showInputDialog("Please enter the password you signed up with");
+            if (verifyPassword == null) System.exit(0);
 
-            if (objLogin.loginUser(username, password, verifyusername, verifyPassword)) {
+            if (objLogin.loginUser(registeredUsername, registeredPassword, verifyUsername, verifyPassword)) {
                 JOptionPane.showMessageDialog(null, "Login Successful " + firstName + " " + lastName);
                 loggedIn = true;
-                objLogin.returnloginstatus(username, password, verifyusername, verifyPassword);
             } else {
                 attempts++;
                 int remainingAttempts = MAX_ATTEMPTS - attempts;
@@ -100,22 +121,24 @@ public class POEPART1 {
 
     private static void loadStoredMessages() {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("stored_messages.txt"));
-            for (String line : lines) {
-                if (!line.trim().isEmpty()) {
-                    String[] parts = line.split("\\|");
-                    if (parts.length == 4) {
-                        Message msg = new Message();
-                        msg.setId(parts[0]);
-                        msg.setRecipient(parts[1]);
-                        msg.setContent(parts[2]);
-                        msg.setHash(parts[3]);
-                        storedMessages.add(msg);
+            if (Files.exists(Paths.get("stored_messages.txt"))) {
+                List<String> lines = Files.readAllLines(Paths.get("stored_messages.txt"));
+                for (String line : lines) {
+                    if (!line.trim().isEmpty()) {
+                        String[] parts = line.split("\\|");
+                        if (parts.length == 4) {
+                            Message msg = new Message();
+                            msg.setId(parts[0]);
+                            msg.setRecipient(parts[1]);
+                            msg.setContent(parts[2]);
+                            msg.setHash(parts[3]);
+                            storedMessages.add(msg);
+                        }
                     }
                 }
             }
         } catch (IOException e) {
-            // No existing file is okay
+            JOptionPane.showMessageDialog(null, "Error loading stored messages: " + e.getMessage());
         }
     }
 
@@ -201,14 +224,21 @@ public class POEPART1 {
             Message message = new Message();
 
             String recipient = JOptionPane.showInputDialog("Enter recipient's cell number (10 digits):");
+            if (recipient == null) continue;
+            
             while (!message.validateRecipient(recipient)) {
                 recipient = JOptionPane.showInputDialog("Invalid cell number. Must be exactly 10 digits.\nEnter recipient's cell number:");
+                if (recipient == null) break;
             }
+            if (recipient == null) continue;
             message.setRecipient(recipient);
 
             String content = JOptionPane.showInputDialog("Enter your message (max 250 chars):");
-            while (content != null && content.length() > 250) {
+            if (content == null) continue;
+            
+            while (content.length() > 250) {
                 content = JOptionPane.showInputDialog("Message too long. Maximum 250 characters.\nEnter your message:");
+                if (content == null) break;
             }
             if (content == null) continue;
 
@@ -347,6 +377,11 @@ public class POEPART1 {
     }
 
     private static void displaySendersAndRecipients() {
+        if (sentMessages.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No messages sent yet!");
+            return;
+        }
+        
         StringBuilder sb = new StringBuilder("=== Senders and Recipients ===\n");
         for (Message msg : sentMessages) {
             sb.append("To: ").append(msg.getRecipient()).append("\n");
@@ -370,7 +405,7 @@ public class POEPART1 {
 
     private static void searchByMessageId() {
         String id = JOptionPane.showInputDialog("Enter message ID to search:");
-        if (id == null) return;
+        if (id == null || id.trim().isEmpty()) return;
         
         for (Message msg : sentMessages) {
             if (msg.getId().equals(id)) {
@@ -384,7 +419,7 @@ public class POEPART1 {
 
     private static void searchByRecipient() {
         String recipient = JOptionPane.showInputDialog("Enter recipient to search:");
-        if (recipient == null) return;
+        if (recipient == null || recipient.trim().isEmpty()) return;
         
         StringBuilder sb = new StringBuilder("Messages to " + recipient + ":\n");
         boolean found = false;
@@ -403,7 +438,7 @@ public class POEPART1 {
 
     private static void deleteByHash() {
         String hash = JOptionPane.showInputDialog("Enter message hash to delete:");
-        if (hash == null) return;
+        if (hash == null || hash.trim().isEmpty()) return;
         
         Iterator<Message> iterator = sentMessages.iterator();
         while (iterator.hasNext()) {
@@ -420,6 +455,11 @@ public class POEPART1 {
     }
 
     private static void displayFullReport() {
+        if (sentMessages.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No messages to display!");
+            return;
+        }
+        
         StringBuilder sb = new StringBuilder("=== Full Message Report ===\n");
         sb.append(String.format("%-12s %-12s %-15s %s\n",
             "Message ID", "Hash", "Recipient", "Content"));
