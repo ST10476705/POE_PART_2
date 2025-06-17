@@ -198,5 +198,154 @@ public class MessageTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+
+    /**
+     * Test of generateMetadata method, of class Message.
+     */
+    @Test
+    public void testGenerateMetadata() {
+        System.out.println("generateMetadata");
+        Message instance = new Message();
+        instance.generateMetadata();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of validateRecipient method, of class Message.
+     */
+    @Test
+    public void testValidateRecipient() {
+        System.out.println("validateRecipient");
+        String recipient = "";
+        Message instance = new Message();
+        boolean expResult = false;
+        boolean result = instance.validateRecipient(recipient);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of validateContent method, of class Message.
+     */
+    @Test
+    public void testValidateContent() {
+        System.out.println("validateContent");
+        String content = "";
+        Message instance = new Message();
+        boolean expResult = false;
+        boolean result = instance.validateContent(content);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of storeToFile method, of class Message.
+     */
+    @Test
+    public void testStoreToFile() {
+        System.out.println("storeToFile");
+        Message instance = new Message();
+        instance.storeToFile();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of toString method, of class Message.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        Message instance = new Message();
+        String expResult = "";
+        String result = instance.toString();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getId method, of class Message.
+     */
+    @Test
+    public void testGetId() {
+        System.out.println("getId");
+        Message instance = new Message();
+        String expResult = "";
+        String result = instance.getId();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getContent method, of class Message.
+     */
+    @Test
+    public void testGetContent() {
+        System.out.println("getContent");
+        Message instance = new Message();
+        String expResult = "";
+        String result = instance.getContent();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getHash method, of class Message.
+     */
+    @Test
+    public void testGetHash() {
+        System.out.println("getHash");
+        Message instance = new Message();
+        String expResult = "";
+        String result = instance.getHash();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setId method, of class Message.
+     */
+    @Test
+    public void testSetId() {
+        System.out.println("setId");
+        String id = "";
+        Message instance = new Message();
+        instance.setId(id);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setContent method, of class Message.
+     */
+    @Test
+    public void testSetContent() {
+        System.out.println("setContent");
+        String content = "";
+        Message instance = new Message();
+        instance.setContent(content);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setHash method, of class Message.
+     */
+    @Test
+    public void testSetHash() {
+        System.out.println("setHash");
+        String hash = "";
+        Message instance = new Message();
+        instance.setHash(hash);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
     
 }
